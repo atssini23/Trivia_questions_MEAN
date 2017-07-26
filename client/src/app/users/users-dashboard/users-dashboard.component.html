@@ -1,0 +1,30 @@
+<a [routerLink]="['/login']">Log In</a> | <a [routerLink]="['/dashboard']">Dashboard</a> 
+
+<h3 *ngIf="current_user">Hello, {{current_user.name}}</h3>
+<p><a href="/logout">Log out</a></p>
+
+
+<form (submit)="onSubmit()" #formData="ngForm">
+  Title: <input type="text" min="5" name="title" [(ngModel)]="new_bucket.title" #title='ngModel' required>
+  <div class='errors' *ngIf='title.errors && (title.dirty || title.touch)'>
+    <span *ngIf='title.errors.required'>*title is required</span>
+  </div>
+  Description: <input type="text" min="10" name="description" [(ngModel)]="new_bucket.description" #description='ngModel' required>
+  <div class='errors' *ngIf='description.errors && (description.dirty || description.touch)'>
+    <span *ngIf='description.errors.required'>*description is required</span>
+  </div>
+  <select [(ngModel)]="new_bucket.user_id" name="user">
+    <option *ngFor="let user of user_list" [ngValue]="user._id">{{user.name}}</option>
+  </select>
+  <input type="submit" value="Add List" [disabled]="!formData.valid">
+</form>
+
+<h5>Before I die:</h5>
+  <div *ngFor="let bucket of bucket_list">
+    <div *ngIf="bucket.user_id === current_user._id || bucket.tagged_user_id === current_user._id">
+      <input  type="checkbox" (click)="onCheck(bucket)" [checked]="bucket.status"> {{bucket.user_name}} | {{bucket.title}} - {{bucket.description}} - {{bucket.createdAt | date}}
+    </div>
+  </div>
+
+<h5>List of other users (Click to view profile):</h5>
+  <a *ngFor="let user of user_list" [routerLink]="['/user', user._id]"> <br>{{user.name}} </a>

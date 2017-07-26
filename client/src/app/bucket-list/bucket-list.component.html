@@ -1,0 +1,23 @@
+<a [routerLink]="['/login']">Log In</a> | <a [routerLink]="['/dashboard']">Dashboard</a> | <a href="/logout">Log out</a>
+
+<div *ngIf = "user">
+  <h3>{{user.name}}'s Bucket List</h3>
+
+  <br>
+  <br>
+
+  <h4>Done</h4>
+  <div *ngFor="let bucket of bucket_list">
+    <div *ngIf="(bucket.user_id === user._id || bucket.tagged_user_id === user._id) && bucket.status">
+      <input type="checkbox" checked disabled> {{bucket.user_name}} | {{bucket.title}} - {{bucket.description}} - {{bucket.createdAt | date}}
+    </div>
+  </div>
+
+  <h4>Pending</h4>
+  <div *ngFor="let bucket of bucket_list">
+    <div *ngIf="(bucket.user_id === user._id || bucket.tagged_user_id === user._id) && !bucket.status">
+      <input type="checkbox" disabled> {{bucket.user_name}} | {{bucket.title}} - {{bucket.description}} - {{bucket.createdAt | date}}
+    </div>
+  </div>
+
+</div>
